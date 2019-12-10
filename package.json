@@ -16,5 +16,12 @@
   "bugs": {
     "url": "https://github.com/redcrossp/3amcentralcrisis/issues"
   },
-  "homepage": "https://github.com/redcrossp/3amcentralcrisis#readme"
+  "homepage": "https://github.com/redcrossp/3amcentralcrisis#readme",
+  "dependencies": {
+    "fs": "0.0.1-security",
+    "http": "0.0.0",
+    "pg": "^7.14.0",
+    "psql": "0.0.1",
+    "url": "^0.11.0"
+  }
 }
