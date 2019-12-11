@@ -1,10 +1,7 @@
 // get node package dependencies 
 
-const http = require("http");           // serve, handle http requests
 const { Pool, Client } = require("pg"); // database interface
-const fs = require("fs");               // read files on server (local machine)
-const urlpkg = require("url");          // urlpkg parsing
-// const express = require("express");     // express
+const exp = require("express")();     // express
 
 const pool = new Pool({
   user: "postgres",
@@ -14,64 +11,50 @@ const pool = new Pool({
   port: "5432"
 });
 
-function getFileContent(filename) {
-  try {
-    return fs.readFileSync(filename, 'utf8').toString();
-  } catch (e) {
-    console.log("Error: ", e.stack);
-  }
-}
+exp.get('/favicon.ico', (req, res) => res.status(204));
+
+exp.get('/',
+  (req, res) => {
+    res.sendFile(__dirname + '/index.html');
+});
+
+exp.get('/js/vue.js',
+  (req, res) => {
+    res.sendFile(__dirname + '/js/vue.js');
+});
+
+exp.get('/js/index.js',
+  (req, res) => {
+    res.sendFile(__dirname + '/js/index.js');
+});
+
+exp.get('/search',
+  async function(req, res) {
+    var urlQueries = req.query;
+    // console.log(urlQueries);
+    var dBQuery = getDBQuery(urlQueries);
+    // console.log(urlQueries);
+    if (dBQuery == undefined) {
+      res.status(204);
+      return;
+    }
+
+    queryDatabase(dBQuery, res, urlQueries.limit);
+});
+
 
 function queryDatabase(query, response, limit) {
   pool.query(query, (err, res) => {
-    console.log(res);
-    
-    // response.writeHead(200, {"Content-Type": "application/json"});
-    response.setHeader('Content-Type', 'application/json');
     limit = limit || 15;
-    var returnResponse = JSON.stringify(res.rows.splice(0, limit));
 
-    response.write(returnResponse);
-    response.end();
+    response.writeHead(200, {'Content-Type': 'application/json'});
+    var returnResponse = JSON.stringify(res.rows.splice(0, limit));
+    response.end(returnResponse);
   });
 }
 
-http.createServer(function reqHandler(request, response) {
-  const { headers, method, url } = request;
-  console.log("Serving a " + method + " request at '" + urlpkg + "'");
-  
-  response.statusCode = 200;
-  
-  let body = [];
-  request.on("error", (err) => {
-    console.error(err);
-  }).on("data", (chunk) => {
-    body.push(chunk);
-  }).on("end", () => {
-    body = Buffer.concat(body).toString();
-
-    response.on("error", (err) => {
-      console.error(err);
-    });
-
-    const responseBody = { headers, method, url, body };
-    console.log("Request at urlpkg " + url);
-    if (url.search("\\\?") != -1) {
-      // this is a db request
-      var queries = urlpkg.parse(url, true).query;
-      var querystr = getQuery(queries);
-      if (querystr == undefined) return;
-      queryDatabase(querystr, response, queries.limit);
-    } else {
-      response.writeHead(200, {"Content-Type": "text/html"});
-      response.end(getFileContent(url.substr(1)));
-    }
-
-    // queryDatabase("SELECT * FROM key_ref");
-  });
-}).listen(8080);
-
 console.log("Server running on port 8080 of localhost");
+exp.listen(8080);
 
 
 
@@ -90,7 +73,7 @@ console.log("Server running on port 8080 of localhost");
 //  SQL STUFF  SQL STUFF  SQL STUFF  SQL STUFF  SQL STUFF  SQL STUFF
 //  SQL STUFF  SQL STUFF  SQL STUFF  SQL STUFF  SQL STUFF  SQL STUFF
 
-function getQuery(queries) {
+function getDBQuery(queries) {
   const { track, artist, limit, energy, loud, dance, acoustic, tempo, key, mm } = queries;
   var queryStr;
 

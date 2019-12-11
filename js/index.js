@@ -29,6 +29,7 @@ let vm = new Vue({
 			params["limit"] = this.limit;
 
 			Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
+      // console.log(url);
 			let result = await fetch(url);
 			this.results = await result.json();
 		},

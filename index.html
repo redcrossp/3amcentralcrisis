@@ -1,123 +1,123 @@
 <!doctype html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<title>S.A.S.S.Y.</title>
-	</head>
+  <head>
+    <meta charset="utf-8">
+    <title>S.A.S.S.Y.</title>
+  </head>
 
-	<body>
-		<div id="app">
-			<img src="img/Logo.png" alt="Sassy Logo" style="height:100px;">
-			<h1>Spotify Advanced Search System at Yale</h1>
-			<h2>Search Interface:</h2>
-			<form>
-				<p style="display:inline-block;font-weight:bold">Track Name:</p>
-				<input v-model="track">
-				<br>
-				<p style="display:inline-block;font-weight:bold">Artist Name:</p>
-				<input v-model="artist">
-				<br>
-				<p style="display:inline-block;font-weight:bold">Key:</p>
-				<input type="radio" id="c" name="key" value="C" v-model="key">
-				<label for="c">C</label>
-				<input type="radio" id="c_sharp_d_flat" name="key" value="C#/Db" v-model="key">
-				<label for="c_sharp_d_flat">C#/Db</label>
-				<input type="radio" id="d" name="key" value="D" v-model="key">
-				<label for="d">D</label>
-				<input type="radio" id="d_sharp_e_flat" name="key" value="D#/Eb" v-model="key">
-				<label for="d_sharp_e_flat">D#/Eb</label>
-				<input type="radio" id="e" name="key" value="E" v-model="key">
-				<label for="e">E</label>
-				<input type="radio" id="f" name="key" value="F" v-model="key">
-				<label for="f">F</label>
-				<input type="radio" id="f_sharp_g_flat" name="key" value="F#/Gb" v-model="key">
-				<label for="f_sharp_g_flat">F#/Gb</label>
-				<input type="radio" id="g" name="key" value="G" v-model="key">
-				<label for="g">G</label>
-				<input type="radio" id="g_sharp_a_flat" name="key" value="G#/Ab" v-model="key">
-				<label for="g_sharp_a_flat">G#/Ab</label>
-				<input type="radio" id="a" name="key" value="A" v-model="key">
-				<label for="a">A</label>
-				<input type="radio" id="a_sharp_b_flat" name="key" value="A#/Bb" v-model="key">
-				<label for="a_sharp_b_flat">A#/Bb</label>
-				<input type="radio" id="b" name="key" value="B" v-model="key">
-				<label for="b">B</label>
-				<br>
-				<input type="radio" id="major" name="mm" value="Major" v-model="mm">
-				<label for="major">Major</label>
-				<input type="radio" id="minor" name="mm" value="Minor" v-model="mm">
-				<label for="minor">Minor</label>
-				
-				<br>
-				<p style="display:inline-block;font-weight:bold">Tempo:</p>
-				<input type="radio" id="tempo_slow" name="tempo" value="Slow" v-model="tempo">
-				<label for="tempo_slow">Slow</label>
-				<input type="radio" id="tempo_med" name="tempo" value="Medium" v-model="tempo">
-				<label for="tempo_med">Medium</label>
-				<input type="radio" id="tempo_fast" name="tempo" value="Fast" v-model="tempo">
-				<label for="tempo_fast">Fast</label>
-				
-				<br>
-				<p style="display:inline-block;font-weight:bold">Acousticness:</p>
-				<input type="radio" id="acoustic_low" name="acoustic" value="Low" v-model="acoustic">
-				<label for="acoustic_low">Low</label>
-				<input type="radio" id="acoustic_med" name="acoustic" value="Medium" v-model="acoustic">
-				<label for="acoustic_med">Medium</label>
-				<input type="radio" id="acoustic_high" name="acoustic" value="High" v-model="acoustic">
-				<label for="acoustic_high">High</label>
-				
-				<br>
-				<p style="display:inline-block;font-weight:bold">Danceability:</p>
-				<input type="radio" id="dance_low" name="dance" value="Low" v-model="dance">
-				<label for="dance_low">Low</label>
-				<input type="radio" id="dance_med" name="dance" value="Medium" v-model="dance">
-				<label for="dance_med">Medium</label>
-				<input type="radio" id="dance_high" name="dance" value="High" v-model="dance">
-				<label for="dance_high">High</label>
-				
-				<br>
-				<p style="display:inline-block;font-weight:bold">Loudness:</p>
-				<input type="radio" id="loud_low" name="loud" value="Low" v-model="loud">
-				<label for="loud_low">Low</label>
-				<input type="radio" id="loud_med" name="loud" value="Medium" v-model="loud">
-				<label for="dance_med">Medium</label>
-				<input type="radio" id="loud_high" name="loud" value="High" v-model="loud">
-				<label for="loud_high">High</label>
-				
-				<br>
-				<p style="display:inline-block;font-weight:bold">Energy:</p>
-				<input type="radio" id="energy_low" name="energy" value="Low" v-model="energy">
-				<label for="energy_low">Low</label>
-				<input type="radio" id="energy_med" name="energy" value="Medium" v-model="energy">
-				<label for="energy_med">Medium</label>
-				<input type="radio" id="energy_high" name="energy" value="High" v-model="energy">
-				<label for="energy_high">High</label>
-				
-				<br>
-				<p style="display:inline-block;font-weight:bold">Results Limit:</p>
-				<input type="radio" id="limit_low" name="limit" value="25" v-model="limit">
-				<label for="limit_low">25</label>
-				<input type="radio" id="limit_med" name="limit" value="50" v-model="limit">
-				<label for="limit_med">50</label>
-				<input type="radio" id="limit_high" name="limit" value="100" v-model="limit">
-				<label for="limit_high">100</label>
-				
-				<br>
-				<button v-on:click="search">Submit Search</button>
-			</form>
-			<hr>
-			
-			<div id="results_list">
-				<div v-for="item in results">
-					<h1>{{ item.track_name }}</h1>
-					<h3>{{ item.artist }}</h3>
-					<p>{{ convert(item.duration) }}</p>
-					<br>
-				</div>
-			</div>
-		</div>
-		
-		<script type="text/javascript" src="js/vue.js"></script>
-		<script type="text/javascript" src="js/index.js"></script>
-	</body>
+  <body>
+    <div id="app">
+      <img src="img/Logo.png" alt="Sassy Logo" style="height:100px;">
+      <h1>Spotify Advanced Search System at Yale</h1>
+      <h2>Search Interface:</h2>
+      <!-- <form> -->
+        <p style="display:inline-block;font-weight:bold">Track Name:</p>
+        <input v-model="track">
+        <br>
+        <p style="display:inline-block;font-weight:bold">Artist Name:</p>
+        <input v-model="artist">
+        <br>
+        <p style="display:inline-block;font-weight:bold">Key:</p>
+        <input type="radio" id="c" name="key" value="C" v-model="key">
+        <label for="c">C</label>
+        <input type="radio" id="c_sharp_d_flat" name="key" value="C#/Db" v-model="key">
+        <label for="c_sharp_d_flat">C#/Db</label>
+        <input type="radio" id="d" name="key" value="D" v-model="key">
+        <label for="d">D</label>
+        <input type="radio" id="d_sharp_e_flat" name="key" value="D#/Eb" v-model="key">
+        <label for="d_sharp_e_flat">D#/Eb</label>
+        <input type="radio" id="e" name="key" value="E" v-model="key">
+        <label for="e">E</label>
+        <input type="radio" id="f" name="key" value="F" v-model="key">
+        <label for="f">F</label>
+        <input type="radio" id="f_sharp_g_flat" name="key" value="F#/Gb" v-model="key">
+        <label for="f_sharp_g_flat">F#/Gb</label>
+        <input type="radio" id="g" name="key" value="G" v-model="key">
+        <label for="g">G</label>
+        <input type="radio" id="g_sharp_a_flat" name="key" value="G#/Ab" v-model="key">
+        <label for="g_sharp_a_flat">G#/Ab</label>
+        <input type="radio" id="a" name="key" value="A" v-model="key">
+        <label for="a">A</label>
+        <input type="radio" id="a_sharp_b_flat" name="key" value="A#/Bb" v-model="key">
+        <label for="a_sharp_b_flat">A#/Bb</label>
+        <input type="radio" id="b" name="key" value="B" v-model="key">
+        <label for="b">B</label>
+        <br>
+        <input type="radio" id="major" name="mm" value="Major" v-model="mm">
+        <label for="major">Major</label>
+        <input type="radio" id="minor" name="mm" value="Minor" v-model="mm">
+        <label for="minor">Minor</label>
+        
+        <br>
+        <p style="display:inline-block;font-weight:bold">Tempo:</p>
+        <input type="radio" id="tempo_slow" name="tempo" value="Slow" v-model="tempo">
+        <label for="tempo_slow">Slow</label>
+        <input type="radio" id="tempo_med" name="tempo" value="Medium" v-model="tempo">
+        <label for="tempo_med">Medium</label>
+        <input type="radio" id="tempo_fast" name="tempo" value="Fast" v-model="tempo">
+        <label for="tempo_fast">Fast</label>
+        
+        <br>
+        <p style="display:inline-block;font-weight:bold">Acousticness:</p>
+        <input type="radio" id="acoustic_low" name="acoustic" value="Low" v-model="acoustic">
+        <label for="acoustic_low">Low</label>
+        <input type="radio" id="acoustic_med" name="acoustic" value="Medium" v-model="acoustic">
+        <label for="acoustic_med">Medium</label>
+        <input type="radio" id="acoustic_high" name="acoustic" value="High" v-model="acoustic">
+        <label for="acoustic_high">High</label>
+        
+        <br>
+        <p style="display:inline-block;font-weight:bold">Danceability:</p>
+        <input type="radio" id="dance_low" name="dance" value="Low" v-model="dance">
+        <label for="dance_low">Low</label>
+        <input type="radio" id="dance_med" name="dance" value="Medium" v-model="dance">
+        <label for="dance_med">Medium</label>
+        <input type="radio" id="dance_high" name="dance" value="High" v-model="dance">
+        <label for="dance_high">High</label>
+        
+        <br>
+        <p style="display:inline-block;font-weight:bold">Loudness:</p>
+        <input type="radio" id="loud_low" name="loud" value="Low" v-model="loud">
+        <label for="loud_low">Low</label>
+        <input type="radio" id="loud_med" name="loud" value="Medium" v-model="loud">
+        <label for="dance_med">Medium</label>
+        <input type="radio" id="loud_high" name="loud" value="High" v-model="loud">
+        <label for="loud_high">High</label>
+        
+        <br>
+        <p style="display:inline-block;font-weight:bold">Energy:</p>
+        <input type="radio" id="energy_low" name="energy" value="Low" v-model="energy">
+        <label for="energy_low">Low</label>
+        <input type="radio" id="energy_med" name="energy" value="Medium" v-model="energy">
+        <label for="energy_med">Medium</label>
+        <input type="radio" id="energy_high" name="energy" value="High" v-model="energy">
+        <label for="energy_high">High</label>
+        
+        <br>
+        <p style="display:inline-block;font-weight:bold">Results Limit:</p>
+        <input type="radio" id="limit_low" name="limit" value="25" v-model="limit">
+        <label for="limit_low">25</label>
+        <input type="radio" id="limit_med" name="limit" value="50" v-model="limit">
+        <label for="limit_med">50</label>
+        <input type="radio" id="limit_high" name="limit" value="100" v-model="limit">
+        <label for="limit_high">100</label>
+        
+        <br>
+        <button v-on:click="search">Submit Search</button>
+        <!-- </form> -->
+      <hr>
+      
+      <div id="results_list">
+        <div v-for="item in results">
+          <h1>{{ item.track_name }}</h1>
+          <h3>{{ item.artist }}</h3>
+          <p>{{ convert(item.duration) }}</p>
+          <br>
+        </div>
+      </div>
+    </div>
+    
+    <script type="text/javascript" src="js/vue.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+  </body>
 </html>
