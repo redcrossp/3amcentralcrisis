@@ -1,3 +1,4 @@
+\connect my_spotify;
 DROP TABLE song;
 DROP TABLE song_features;
 DROP TABLE Key_Ref;
