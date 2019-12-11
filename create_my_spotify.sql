@@ -19,7 +19,8 @@ CREATE TABLE song_features (
 	liveness decimal,
 	loudness decimal,
 	speechiness decimal,
-	valence decimal
+	valence decimal,
+	popularity integer
 );
 
 CREATE TABLE Key_Ref (
@@ -56,3 +57,6 @@ INSERT INTO Key_Ref (key_root, mode, key) VALUES
 	(-1, 1, 'No key detected'),
 	(-1, 0, 'No key detected')
 ;
+
+COPY song FROM '/Users/joyceduan/Desktop/3amcentralcrisis/song.csv' DELIMITER ',' CSV HEADER;
+COPY song_features FROM '/Users/joyceduan/Desktop/3amcentralcrisis/song_features.csv' DELIMITER ',' CSV HEADER;
