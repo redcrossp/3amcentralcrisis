@@ -5,7 +5,7 @@ let vm = new Vue({
 		track:"",
 		artist:"",
 		key:"",
-		mm:"Major",
+		mm:"",
 		tempo:"",
 		acoustic:"",
 		dance:"",

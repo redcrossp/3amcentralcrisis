@@ -1,7 +1,8 @@
 // get node package dependencies 
 
 const { Pool, Client } = require("pg"); // database interface
-const exp = require("express")();     // express
+const express = require("express");     // appress
+const app = express();
 
 const pool = new Pool({
   user: "postgres",
@@ -11,29 +12,35 @@ const pool = new Pool({
   port: "5432"
 });
 
-exp.get('/favicon.ico', (req, res) => res.status(204));
+// app.use(express.static('public'));
+app.get('/favicon.ico', (req, res) => res.status(204));
 
-exp.get('/',
+app.get('/',
   (req, res) => {
     res.sendFile(__dirname + '/index.html');
 });
 
-exp.get('/js/vue.js',
+app.get('/img/Logo.png',
+  (req, res) => {
+    res.sendFile(__dirname + '/img/Logo.png');
+});
+
+app.get('/js/vue.js',
   (req, res) => {
     res.sendFile(__dirname + '/js/vue.js');
 });
 
-exp.get('/js/index.js',
+app.get('/js/index.js',
   (req, res) => {
     res.sendFile(__dirname + '/js/index.js');
 });
 
-exp.get('/search',
+app.get('/search',
   async function(req, res) {
     var urlQueries = req.query;
-    // console.log(urlQueries);
+    console.log(urlQueries);
     var dBQuery = getDBQuery(urlQueries);
-    // console.log(urlQueries);
+    console.log(dBQuery);
     if (dBQuery == undefined) {
       res.status(204);
       return;
@@ -48,13 +55,15 @@ function queryDatabase(query, response, limit) {
     limit = limit || 15;
 
     response.writeHead(200, {'Content-Type': 'application/json'});
-    var returnResponse = JSON.stringify(res.rows.splice(0, limit));
-    response.end(returnResponse);
+    var data = res.rows.splice(0, limit)
+    console.log(data);
+    var json = JSON.stringify(data);
+    response.end(json);
   });
 }
 
 console.log("Server running on port 8080 of localhost");
-exp.listen(8080);
+app.listen(8080);
 
 
 
@@ -74,7 +83,7 @@ exp.listen(8080);
 //  SQL STUFF  SQL STUFF  SQL STUFF  SQL STUFF  SQL STUFF  SQL STUFF
 
 function getDBQuery(queries) {
-  const { track, artist, limit, energy, loud, dance, acoustic, tempo, key, mm } = queries;
+  const { track, artist, limit, energy, loud, dance, acoustic, tempo, key } = queries;
   var queryStr;
 
 if (track)
@@ -85,9 +94,9 @@ if (artist)
 /* Search by artist */
 querystr = "SELECT song.track_name, song.artist, song.duration_ms FROM song, song_features WHERE song.id = song_features.id AND song.artist LIKE '%_____%' ORDER BY song_features.popularity DESC;".replace("_____", artist);
 
-if (key)
+if (key.length > 2)
 /* Search by key */
-querystr = "SELECT song.track_name, song.artist, song.duration_ms FROM song, song_features, Key_Ref WHERE song.id = song_features.id AND Key_Ref.key = _____ AND Key_Ref.key_root = song_features.key_root AND Key_Ref.mode = song_features.mode ORDER BY song_features.popularity DESC;".replace("_____", key + " " + mm);
+querystr = "SELECT song.track_name, song.artist, song.duration_ms FROM song, song_features, Key_Ref WHERE song.id = song_features.id AND Key_Ref.key = '_____' AND Key_Ref.key_root = song_features.key_root AND Key_Ref.mode = song_features.mode ORDER BY song_features.popularity DESC;".replace("_____", key);
 
 if (tempo == "Slow")
   /* Search by SLow tempo */
