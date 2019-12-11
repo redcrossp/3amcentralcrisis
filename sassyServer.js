@@ -1,8 +1,10 @@
 // get node package dependencies 
+
 const http = require("http");           // serve, handle http requests
 const { Pool, Client } = require("pg"); // database interface
 const fs = require("fs");               // read files on server (local machine)
 const urlpkg = require("url");          // urlpkg parsing
+// const express = require("express");     // express
 
 const pool = new Pool({
   user: "postgres",
@@ -20,16 +22,17 @@ function getFileContent(filename) {
   }
 }
 
-function queryDatabase(query, response) {
+function queryDatabase(query, response, limit) {
   pool.query(query, (err, res) => {
-    // console.log(err, res);
-    pool.end();
+    console.log(res);
+    
+    // response.writeHead(200, {"Content-Type": "application/json"});
+    response.setHeader('Content-Type', 'application/json');
+    limit = limit || 15;
+    var returnResponse = JSON.stringify(res.rows.splice(0, limit));
 
-    response.writeHead(200, {"Content-Type": "application/json"});
-    // console.log(res);
-    var returnResponse = JSON.stringify(res.rows);
-    // console.log(returnResponse);
-    response.end(returnResponse);
+    response.write(returnResponse);
+    response.end();
   });
 }
 
@@ -55,8 +58,10 @@ http.createServer(function reqHandler(request, response) {
     console.log("Request at urlpkg " + url);
     if (url.search("\\\?") != -1) {
       // this is a db request
-      var querystr = getQuery(urlpkg.parse(url, true).query);
-      queryDatabase(querystr, response);
+      var queries = urlpkg.parse(url, true).query;
+      var querystr = getQuery(queries);
+      if (querystr == undefined) return;
+      queryDatabase(querystr, response, queries.limit);
     } else {
       response.writeHead(200, {"Content-Type": "text/html"});
       response.end(getFileContent(url.substr(1)));
@@ -80,10 +85,10 @@ console.log("Server running on port 8080 of localhost");
 
 
 
-//  SQL STUFF  
-//  SQL STUFF  
-//  SQL STUFF  
-//  SQL STUFF  
+//  SQL STUFF  SQL STUFF  SQL STUFF  SQL STUFF  SQL STUFF  SQL STUFF
+//  SQL STUFF  SQL STUFF  SQL STUFF  SQL STUFF  SQL STUFF  SQL STUFF
+//  SQL STUFF  SQL STUFF  SQL STUFF  SQL STUFF  SQL STUFF  SQL STUFF
+//  SQL STUFF  SQL STUFF  SQL STUFF  SQL STUFF  SQL STUFF  SQL STUFF
 
 function getQuery(queries) {
   const { track, artist, limit, energy, loud, dance, acoustic, tempo, key } = queries;

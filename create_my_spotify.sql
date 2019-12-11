@@ -59,5 +59,5 @@ INSERT INTO Key_Ref (key_root, mode, key) VALUES
 	(-1, 0, 'No key detected')
 ;
 
-COPY song FROM '/Users/joyceduan/Desktop/3amcentralcrisis/song.csv' DELIMITER ',' CSV HEADER;
-COPY song_features FROM '/Users/joyceduan/Desktop/3amcentralcrisis/song_features.csv' DELIMITER ',' CSV HEADER;
+COPY song FROM '/Users/fiddle/Documents/School/Databases/finalP/song.csv' DELIMITER ',' CSV HEADER;
+COPY song_features FROM '/Users/fiddle/Documents/School/Databases/finalP/song_features.csv' DELIMITER ',' CSV HEADER;

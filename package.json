@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/redcrossp/3amcentralcrisis#readme",
   "dependencies": {
+    "express": "^4.17.1",
     "fs": "0.0.1-security",
     "http": "0.0.0",
     "pg": "^7.14.0",
