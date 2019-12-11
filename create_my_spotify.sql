@@ -1,4 +1,5 @@
 CREATE DATABASE my_spotify;
+\connect my_spotify;
 
 CREATE TABLE song (
 	id varchar PRIMARY KEY,

@@ -2,17 +2,15 @@
 const http = require("http");           // serve, handle http requests
 const { Pool, Client } = require("pg"); // database interface
 const fs = require("fs");               // read files on server (local machine)
-const url = require("url");             // url parsing
+const urlpkg = require("url");             // urlpkg parsing
 
-/*
 const pool = new Pool({
-  user: "username",
+  user: "postgres",
   host: "localhost", // or 127.0.0.1
-  database: "databasename",
-  password: "password",
-  port: "8080"
+  database: "my_spotify",
+  password: "postgres",
+  port: "5432"
 });
-*/
 
 function getFileContent(filename) {
   try {
@@ -30,8 +28,8 @@ function queryDatabase(query) {
 }
 
 http.createServer(function reqHandler(request, response) {
-  const { headers, method, requrl } = request;
-  console.log("Serving a " + method + " request at '" + url + "'");
+  const { headers, method, url } = request;
+  console.log("Serving a " + method + " request at '" + urlpkg + "'");
   
   response.statusCode = 200;
   
@@ -47,14 +45,22 @@ http.createServer(function reqHandler(request, response) {
       console.error(err);
     });
 
-    // get any queries in URL
-    var query = url.parse(requrl, true).query;
-
-    response.writeHead(200, {"Content-Type": "text/html"})l
-
     const responseBody = { headers, method, url, body };
+    console.log("Request at urlpkg " + url);
 
-    response.end(JSON.stringify(responseBody))
+    if (url.search("search") != -1) {
+      // this is a db request
+      response.writeHead(200, {"Content-Type": "application/json"});
+      response.end(queryDatabase("SELECT * FROM key_ref"));
+    } else {
+      response.writeHead(200, {"Content-Type": "text/html"});
+      response.end(getFileContent("index.html"));
+    }
+
+    // get any queries in URL
+    // var query = urlpkg.parse(url, true).query;
+    queryDatabase("SELECT * FROM key_ref");
+      
   });
 }).listen(8080);
 
