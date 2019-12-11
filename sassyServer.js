@@ -91,7 +91,7 @@ console.log("Server running on port 8080 of localhost");
 //  SQL STUFF  SQL STUFF  SQL STUFF  SQL STUFF  SQL STUFF  SQL STUFF
 
 function getQuery(queries) {
-  const { track, artist, limit, energy, loud, dance, acoustic, tempo, key } = queries;
+  const { track, artist, limit, energy, loud, dance, acoustic, tempo, key, mm } = queries;
   var queryStr;
 
 if (track)
@@ -104,7 +104,7 @@ querystr = "SELECT song.track_name, song.artist, song.duration_ms FROM song, son
 
 if (key)
 /* Search by key */
-querystr = "SELECT song.track_name, song.artist, song.duration_ms FROM song, song_features, Key_Ref WHERE song.id = song_features.id AND Key_Ref.key = _____ AND Key_Ref.key_root = song_features.key_root AND Key_Ref.mode = song_features.mode ORDER BY song_features.popularity DESC;".replace("_____", key);
+querystr = "SELECT song.track_name, song.artist, song.duration_ms FROM song, song_features, Key_Ref WHERE song.id = song_features.id AND Key_Ref.key = _____ AND Key_Ref.key_root = song_features.key_root AND Key_Ref.mode = song_features.mode ORDER BY song_features.popularity DESC;".replace("_____", key + " " + mm);
 
 if (tempo == "Slow")
   /* Search by SLow tempo */
