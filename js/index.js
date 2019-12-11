@@ -15,7 +15,7 @@ let vm = new Vue({
 		results:[]
 	},
 	methods: {
-		search: function (event) {
+		search: async function (event) {
 			let url = new URL('http://localhost:8080/search');
 			let params = {};
 			params["track"] = this.track;
@@ -29,7 +29,8 @@ let vm = new Vue({
 			params["limit"] = this.limit;
 
 			Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
-			fetchResults(url);
+			let result = await fetch(url);
+			this.results = await result.json();
 		},
 		convert: function (ms) {
 			let seconds = Math.trunc(parseInt(ms)/1000);
@@ -42,8 +43,3 @@ let vm = new Vue({
 		}
 	}
 });
-
-async function fetchResults(searchURL) {
-	let result = await fetch(searchURL);
-	vm.results = await result.json();
-}
